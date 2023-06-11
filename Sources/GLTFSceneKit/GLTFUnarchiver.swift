@@ -1251,6 +1251,9 @@ public class GLTFUnarchiver {
         animation.values = values
         animation.repeatCount = .infinity
         animation.duration = duration
+        if let animationName = glAnimation.name {
+            animation.keyPath = "\(UUID().uuidString)_\(animationName)"
+        }
         //animation.timingFunctions = timingFunctions
         
         let group = CAAnimationGroup()
@@ -1380,11 +1383,8 @@ public class GLTFUnarchiver {
             guard let animationKeyPath = keyPathMap[keyPath] else {
                 throw GLTFUnarchiveError.NotSupported("loadAnimation: animation key \(keyPath) is not supported")
             }
-            var keyPath = animationKeyPath
-            if let animationName = glAnimation.name {
-                keyPath.append("_\(animationName)")
-            }
-            keyframeAnimation.keyPath = keyPath
+            keyframeAnimation.keyPath = animationKeyPath
+
             animation = group
         }
         
