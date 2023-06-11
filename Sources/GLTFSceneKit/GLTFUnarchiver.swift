@@ -1380,7 +1380,11 @@ public class GLTFUnarchiver {
             guard let animationKeyPath = keyPathMap[keyPath] else {
                 throw GLTFUnarchiveError.NotSupported("loadAnimation: animation key \(keyPath) is not supported")
             }
-            keyframeAnimation.keyPath = animationKeyPath
+            var keyPath = animationKeyPath
+            if let animationName = glAnimation.name {
+                keyPath.append("_\(animationName)")
+            }
+            keyframeAnimation.keyPath = keyPath
             animation = group
         }
         
