@@ -1305,7 +1305,9 @@ public class GLTFUnarchiver {
             //animation.values = [NSNumber]()
             //animation.repeatCount = .infinity
             animation.duration = duration
-            
+            if let animationName = glAnimation.name {
+                animation.keyPath = "\(UUID().uuidString)_\(animationName)"
+            }
             animations.append(animation)
         }
         group.animations = animations
@@ -1390,7 +1392,11 @@ public class GLTFUnarchiver {
         
         //let scnAnimation = SCNAnimation(caAnimation: animation)
         //node.addAnimation(scnAnimation, forKey: keyPath)
-        node.addAnimation(animation, forKey: keyPath)
+        var keyPathName = keyPath
+        if let animationName = glAnimation.name {
+            keyPathName.append("_\(animationName)")
+        }
+        node.addAnimation(animation, forKey: keyPathName)
         
         //glAnimation.didLoad(by: scnAnimation, unarchiver: self)
         glAnimation.didLoad(by: animation, unarchiver: self)
